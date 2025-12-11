@@ -4,6 +4,7 @@ from dotenv import load_dotenv # type: ignore
 from google import genai
 from google.genai import types # type: ignore
 from prompts import SYSTEM_PROMPT
+from function_schemas import *
 
 
 # Load API key from .env file
@@ -19,13 +20,27 @@ parser.add_argument("user_prompt", type=str, help="The prompt to send to the Gem
 parser.add_argument("--verbose", action="store_true", help="Enable verbose output.")
 args = parser.parse_args()
 
+ # Prepare messages
 messages = types.Content(role="user", parts=[types.Part(text=args.user_prompt)])
+
+# Define available functions
+available_functions = types.Tool(
+    function_declarations=[
+        schema_get_files_info, 
+        schema_get_file_content, 
+        schema_run_python_file, 
+        schema_write_file
+        ],
+)
 
 def main():
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=messages,
-        config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
+        contents=[messages],
+        config=types.GenerateContentConfig(
+            tools=[available_functions],
+            system_instruction=SYSTEM_PROMPT
+            )
     )
     
     if response.usage_metadata is not None:
@@ -37,7 +52,12 @@ def main():
     else:
         raise RuntimeError("No usage metadata found in the response.")
     
-    print(response.text)
+    if response.function_calls:
+        print("Function Calls:")
+        for function_call_part in response.function_calls:
+            print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+    else:
+        print(response.text)
 
 
 if __name__ == "__main__":
