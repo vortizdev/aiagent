@@ -3,8 +3,8 @@ import argparse
 from dotenv import load_dotenv # type: ignore
 from google import genai
 from google.genai import types # type: ignore
-from prompts import SYSTEM_PROMPT, MAX_ITERATIONS
-from function_schemas import *
+from src.prompts import SYSTEM_PROMPT, MAX_ITERATIONS
+from functions.function_schemas import *
 from functions.get_file_content import get_file_content
 from functions.get_files_info import get_files_info
 from functions.run_python_file import run_python_file
