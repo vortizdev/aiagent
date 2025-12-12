@@ -73,7 +73,7 @@ def main():
                 
         # Handle function calls and display results if verbose mode is enabled
         if response.function_calls:
-            print("Function Calls:", response.function_calls)
+            print("Function Calls:")
             for function_call_part in response.function_calls:
                 function_call_result = call_function(function_call_part, args.verbose)
                 # Check if the function call was successful
@@ -109,7 +109,7 @@ def call_function(function_call_part, verbose=False):
     if function_name in function:
         function_result = function[function_name](working_dir, **function_args)
         if verbose:
-            print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+            print(f" - Calling function: {function_call_part.name}({function_call_part.args})")
         else:
             print(f" - Calling function: {function_call_part.name}")
         # Return the function result as a Content object
