@@ -1,9 +1,14 @@
 import os
 import argparse
+import sys
 from dotenv import load_dotenv # type: ignore
 from google import genai
 from google.genai import types # type: ignore
-from src.prompts import SYSTEM_PROMPT, MAX_ITERATIONS
+
+# Add the project root to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from prompts import SYSTEM_PROMPT, MAX_ITERATIONS
 from functions.function_schemas import *
 from functions.get_file_content import get_file_content
 from functions.get_files_info import get_files_info
