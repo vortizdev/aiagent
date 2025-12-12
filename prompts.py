@@ -15,4 +15,9 @@ Example: User: "What files are in the root?" Response: "Function Call: get_files
 Example: User: "Write a file with the content 'Hello, World!'" Response: "Function Call: write_file({\"file_path\": \"example.txt\", \"content\": \"Hello, World!\"})"
 
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+
+When finished, always provide a response with exactly all steps taken, including any function calls and why.
+Finally write "Done." at the end of your message.
 """
+
+MAX_ITERATIONS = 20
